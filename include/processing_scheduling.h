@@ -28,6 +28,16 @@ extern "C"
     } 
     ScheduleResult_t;
 
+    typedef struct 
+    {
+        float* waiting_time;     // the waiting time in the ready queue until first schedue on the cpu
+        float* turnaround_time;  // the completion time of the PCBs
+        unsigned long total_run_time;   // the total time to process all the PCBs in the ready queue
+    } 
+    NotePad_t;
+
+
+
     // Reads the PCB burst time values from the binary file into ProcessControlBlock_t remaining_burst_time field
     // for N number of PCB burst time stored in the file.
     // \param input_file the file containing the PCB burst times
@@ -65,6 +75,12 @@ extern "C"
     // \return true if function ran successful else false for an error
     bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *result);
 
+    // Compares the arrival time of block one to block two, used for qsort
+    // \param First PCB to be compared
+    // \param Second PCB to be compared
+    // \return an integer value  >, =, or < 1 depending on comparison result
+    int compare_arrival_times(const void *blockOne, const void *blockTwo)
+    
 #ifdef __cplusplus
 }
 #endif
