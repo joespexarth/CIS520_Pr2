@@ -89,8 +89,24 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
 
 dyn_array_t *load_process_control_blocks(const char *input_file) 
 {
+    dyn_array_t* blocks;
+    ProcessControlBlock_t block;
+    int* numBlocks;
     UNUSED(input_file);
-    return NULL;
+    int file = open(input_file, O_RDONLY);
+
+    size_t error = read(file, numBlocks, 1);
+    blocks = dyn_array_create(*numBlocks, sizeof(ProcessControlBlock_t), NULL);
+    for(int i = 0; i < *numBlocks; ++i){
+        error = read(file, block->remaining_burst_time, 1);
+        error = read(file, block->priority, 1);
+        error = read(file, block->arrival, 1);
+
+        dyn_array_push_front(blocks, block);
+    }
+
+    close(input_file);
+    return blocks;
 }
 
 bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *result) 
