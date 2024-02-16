@@ -43,8 +43,38 @@ int main(int argc, char **argv)
 }
 
 /*
+* First come first serve tests
+*/
+
+//Tests for when a parameter is wrong
+TEST (first_come_first_serve, IncorrectParameters) 
+{
+	dyn_array_t* blocks;
+    ScheduleResult_t* results;
+	bool success = first_come_first_serve(NULL, results);
+	EXPECT_EQ(success,false);
+}
+
+
+//Tests for when first come first serve should work with no errors
+TEST (first_come_first_serve, CorrectInput) 
+{
+	dyn_array_t* blocks;
+    ScheduleResult_t* results;
+	bool success = first_come_first_serve(blocks, results);
+	EXPECT_EQ(success,true);
+    EXPECT_EQ(results->average_turnaround_time,16); //Maybe calculated wrong
+    EXPECT_EQ(results->average_waiting_time,16);
+    EXPECT_EQ(results->total_run_time,30);
+}
+
+
+
+/*
 * Load process control block tests
 */
+
+//Tests for a null input file
 TEST (load_process_control_blocks, NULLInputFile) 
 {
 	const char *input_filename = NULL;
@@ -52,7 +82,8 @@ TEST (load_process_control_blocks, NULLInputFile)
 	EXPECT_EQ(blocks,NULL);
 }
 
-TEST (load_process_control_blocks, GoodArray) 
+//Tests for when the input file is good.
+TEST (load_process_control_blocks, GoodInput) 
 {
 	const char *input_filename = "pcb.bin";
     size_t size = 15;
