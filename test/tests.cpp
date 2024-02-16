@@ -114,7 +114,7 @@ TEST (load_process_control_blocks, NULLInputFile)
 TEST (load_process_control_blocks, GoodArray) 
 {
 	const char *input_filename = "../pcb.bin";
-    size_t size = 32516;
+    size_t size = 4;
 	dyn_array_t* blocks = load_process_control_blocks(input_filename);
     EXPECT_NE(blocks, nullptr);
 	EXPECT_EQ(dyn_array_size(blocks), size);

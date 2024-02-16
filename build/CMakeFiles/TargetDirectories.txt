@@ -1,0 +1,5 @@
+/homes/cseze/CIS520_Pr2/build/CMakeFiles/edit_cache.dir
+/homes/cseze/CIS520_Pr2/build/CMakeFiles/rebuild_cache.dir
+/homes/cseze/CIS520_Pr2/build/CMakeFiles/hw2_test.dir
+/homes/cseze/CIS520_Pr2/build/CMakeFiles/dyn_array.dir
+/homes/cseze/CIS520_Pr2/build/CMakeFiles/analysis.dir

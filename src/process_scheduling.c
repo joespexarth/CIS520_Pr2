@@ -97,21 +97,21 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
         return NULL;
     }
 
-    int error = read(file, &numBlocks, 1);
+    int error = read(file, &numBlocks, 4);
     if (error == -1){
         return NULL;
     }
     blocks = dyn_array_create(numBlocks, sizeof(ProcessControlBlock_t), NULL);
     for(int i = 0; i < numBlocks; ++i){
-        error = read(file, &(block.remaining_burst_time), 1);
+        error = read(file, &(block.remaining_burst_time), 4);
         if(error == -1){
             return NULL;
         }
-        error = read(file, &(block.priority), 1);
+        error = read(file, &(block.priority), 4);
         if(error == -1){
             return NULL;
         }
-        error = read(file, &(block.arrival), 1);
+        error = read(file, &(block.arrival), 4);
         if(error == -1){
             return NULL;
         }

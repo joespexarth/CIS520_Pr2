@@ -79,7 +79,7 @@ extern "C"
     // \param First PCB to be compared
     // \param Second PCB to be compared
     // \return an integer value  >, =, or < 1 depending on comparison result
-    int compare_arrival_times(const void *blockOne, const void *blockTwo)
+    int compare_arrival_times(const void *blockOne, const void *blockTwo);
     
 #ifdef __cplusplus
 }
