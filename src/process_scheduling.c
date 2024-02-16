@@ -18,6 +18,8 @@ void virtual_cpu(ProcessControlBlock_t *process_control_block)
     --process_control_block->remaining_burst_time;
 }
 
+int compare_arrival_times(const void *blockOne, const void *blockTwo){ return ((ProcessControlBlock_t *)blockOne)->arrival - ((ProcessControlBlock_t *)blockTwo)->arrival; }
+
 bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result) 
 {
     if(ready_queue == NULL)                                 // Return false for invalid parameters
@@ -63,8 +65,6 @@ bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result)
     return true;                                            // Return true for successfull schedule
 }
 
-int compare_arrival_times(const void *blockOne, const void *blockTwo){ return ((ProcessControlBlock_t *)blockOne)->arrival - ((ProcessControlBlock_t *)blockTwo)->arrival; }
-
 bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result) 
 {
     UNUSED(ready_queue);
@@ -90,33 +90,33 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
 dyn_array_t *load_process_control_blocks(const char *input_file) 
 {
     dyn_array_t* blocks;
-    ProcessControlBlock_t* block;
-    int* numBlocks;
+    ProcessControlBlock_t block;
+    int numBlocks;
     int file = open(input_file, O_RDONLY);
     if(file == -1){
         return NULL;
     }
 
-    int error = read(file, numBlocks, 1);
+    int error = read(file, &numBlocks, 1);
     if (error == -1){
         return NULL;
     }
-    blocks = dyn_array_create(*numBlocks, sizeof(ProcessControlBlock_t), NULL);
-    for(int i = 0; i < *numBlocks; ++i){
-        error = read(file, &(block->remaining_burst_time), 1);
+    blocks = dyn_array_create(numBlocks, sizeof(ProcessControlBlock_t), NULL);
+    for(int i = 0; i < numBlocks; ++i){
+        error = read(file, &(block.remaining_burst_time), 1);
         if(error == -1){
             return NULL;
         }
-        error = read(file, &(block->priority), 1);
+        error = read(file, &(block.priority), 1);
         if(error == -1){
             return NULL;
         }
-        error = read(file, &(block->arrival), 1);
+        error = read(file, &(block.arrival), 1);
         if(error == -1){
             return NULL;
         }
 
-        dyn_array_push_front(blocks, block);
+        dyn_array_push_front(blocks, &block);
     }
 
     close(file);

@@ -49,9 +49,12 @@ int main(int argc, char **argv)
 //Tests for when a parameter is wrong
 TEST (first_come_first_serve, IncorrectParameters) 
 {
-	dyn_array_t* blocks;
-    ScheduleResult_t* results;
-	bool success = first_come_first_serve(NULL, results);
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+	bool success = first_come_first_serve(nullptr, &results);
 	EXPECT_EQ(success,false);
 }
 
@@ -59,34 +62,60 @@ TEST (first_come_first_serve, IncorrectParameters)
 //Tests for when first come first serve should work with no errors
 TEST (first_come_first_serve, CorrectInput) 
 {
-	dyn_array_t* blocks;
-    ScheduleResult_t* results;
-	bool success = first_come_first_serve(blocks, results);
-	EXPECT_EQ(success,true);
-    EXPECT_EQ(results->average_turnaround_time,16); //Maybe calculated wrong
-    EXPECT_EQ(results->average_waiting_time,16);
-    EXPECT_EQ(results->total_run_time,30);
-}
+	dyn_array_t* blocks = dyn_array_create(3, sizeof(ProcessControlBlock_t), NULL);
 
+    ProcessControlBlock_t block1;
+    ProcessControlBlock_t block2;
+    ProcessControlBlock_t block3;
+
+    block1.arrival = 0;
+    block2.arrival = 1;
+    block3.arrival = 2;
+
+    block1.priority = 3;
+    block2.priority = 1;
+    block3.priority = 2;
+
+    block1.remaining_burst_time = 24;
+    block2.remaining_burst_time = 3;
+    block3.remaining_burst_time = 3;
+
+    block1.started = false;
+    block2.started = false;
+    block3.started = false;
+    
+    dyn_array_push_front(blocks, &block1);
+    dyn_array_push_front(blocks, &block2);
+    dyn_array_push_front(blocks, &block3);
+
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+	bool success = first_come_first_serve(blocks, &results);
+	EXPECT_EQ(success,true);
+    EXPECT_EQ(results.average_turnaround_time, (float)16); //Maybe calculated wrong
+    EXPECT_EQ(results.average_waiting_time, (float)16);
+    EXPECT_EQ(results.total_run_time, (float)30);
+}
 
 
 /*
 * Load process control block tests
 */
-
-//Tests for a null input file
 TEST (load_process_control_blocks, NULLInputFile) 
 {
 	const char *input_filename = NULL;
 	dyn_array_t* blocks = load_process_control_blocks(input_filename);
-	EXPECT_EQ(blocks,NULL);
+	EXPECT_EQ(blocks,nullptr);
 }
 
-//Tests for when the input file is good.
-TEST (load_process_control_blocks, GoodInput) 
+TEST (load_process_control_blocks, GoodArray) 
 {
-	const char *input_filename = "pcb.bin";
-    size_t size = 15;
+	const char *input_filename = "../pcb.bin";
+    size_t size = 32516;
 	dyn_array_t* blocks = load_process_control_blocks(input_filename);
+    EXPECT_NE(blocks, nullptr);
 	EXPECT_EQ(dyn_array_size(blocks), size);
 }
