@@ -40,7 +40,7 @@ bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result)
     unsigned long totalRunTime = 0;                         // Declare local variables for scheduling calcualtions
     unsigned long totalWaitTime = 0;
   
-    for(int i = 0; i < n; i++)                              // loop over the ready_queue
+    for(size_t i = 0; i < n; i++)                              // loop over the ready_queue
     {
         ProcessControlBlock_t * PCB = dyn_array_at(ready_queue, i);
 
@@ -90,22 +90,36 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
 dyn_array_t *load_process_control_blocks(const char *input_file) 
 {
     dyn_array_t* blocks;
-    ProcessControlBlock_t block;
+    ProcessControlBlock_t* block;
     int* numBlocks;
-    UNUSED(input_file);
     int file = open(input_file, O_RDONLY);
+    if(file == -1){
+        return NULL;
+    }
 
-    size_t error = read(file, numBlocks, 1);
+    int error = read(file, numBlocks, 1);
+    if (error == -1){
+        return NULL;
+    }
     blocks = dyn_array_create(*numBlocks, sizeof(ProcessControlBlock_t), NULL);
     for(int i = 0; i < *numBlocks; ++i){
-        error = read(file, block->remaining_burst_time, 1);
-        error = read(file, block->priority, 1);
-        error = read(file, block->arrival, 1);
+        error = read(file, &(block->remaining_burst_time), 1);
+        if(error == -1){
+            return NULL;
+        }
+        error = read(file, &(block->priority), 1);
+        if(error == -1){
+            return NULL;
+        }
+        error = read(file, &(block->arrival), 1);
+        if(error == -1){
+            return NULL;
+        }
 
         dyn_array_push_front(blocks, block);
     }
 
-    close(input_file);
+    close(file);
     return blocks;
 }
 

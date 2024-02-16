@@ -41,3 +41,21 @@ int main(int argc, char **argv)
     ::testing::AddGlobalTestEnvironment(new GradeEnvironment);
     return RUN_ALL_TESTS();
 }
+
+/*
+* Load process control block tests
+*/
+TEST (load_process_control_blocks, NULLInputFile) 
+{
+	const char *input_filename = NULL;
+	dyn_array_t* blocks = load_process_control_blocks(input_filename);
+	EXPECT_EQ(blocks,NULL);
+}
+
+TEST (load_process_control_blocks, GoodArray) 
+{
+	const char *input_filename = "pcb.bin";
+    size_t size = 15;
+	dyn_array_t* blocks = load_process_control_blocks(input_filename);
+	EXPECT_EQ(dyn_array_size(blocks), size);
+}
