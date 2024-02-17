@@ -17,7 +17,6 @@ void virtual_cpu(ProcessControlBlock_t *process_control_block)
     // decrement the burst time of the pcb
     --process_control_block->remaining_burst_time;
 }
-
 int compare_arrival_times(const void *blockOne, const void *blockTwo){ return ((ProcessControlBlock_t *)blockOne)->arrival - ((ProcessControlBlock_t *)blockTwo)->arrival; }
 
 bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result) 
@@ -41,27 +40,35 @@ bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result)
 
     unsigned long totalRunTime = 0;                         // Declare local variables for scheduling calcualtions
     unsigned long totalWaitTime = 0;
+    unsigned long totalTurnAroundTime = 0;
   
     for(size_t i = 0; i < n; i++)                              // loop over the ready_queue
     {
         ProcessControlBlock_t * PCB = dyn_array_at(ready_queue, i);
-
-        totalWaitTime += totalRunTime;                      // Keep track of the total wait time -> calulating wait time first as we are not waiting on 
+        if(i == 0)
+            totalWaitTime += totalRunTime;                      // Keep track of the total wait time -> calulating wait time first as we are not waiting on 
+        else 
+            totalWaitTime += totalRunTime - PCB->arrival;
                                                             // the runtime of the current PCB in-order for this PCB to start
-
+        totalTurnAroundTime += (totalRunTime + PCB->remaining_burst_time - PCB->arrival);
         totalRunTime += PCB->remaining_burst_time;          // Keep track of the total run time
+        while(PCB->remaining_burst_time > 0)
+        {
+            virtual_cpu(PCB);
+        }
     }
 
-    if(totalWaitTime <= 0 || totalRunTime <= 0)             //  Ensure logical values
+    if(totalWaitTime <= 0 || totalRunTime <= 0 || totalTurnAroundTime <= 0)             //  Ensure logical values
     {
         printf("Failed to calulate scheduling parameters in FCFS");
         return false;
     }
     
     result->average_waiting_time = (float) totalWaitTime / n;         // Set the schedule results
-    result->average_turnaround_time = (float) totalRunTime / n;  
+    result->average_turnaround_time = (float) totalTurnAroundTime / n;  
     result->total_run_time = totalRunTime;                  
 
+    free(ready_queue);
     return true;                                            // Return true for successfull schedule
 }
 
