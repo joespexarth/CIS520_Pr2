@@ -58,7 +58,6 @@ TEST (first_come_first_serve, IncorrectParameters)
 	EXPECT_EQ(success,false);
 }
 
-
 //Tests for when first come first serve should work with no errors
 TEST (first_come_first_serve, CorrectInput) 
 {
@@ -95,7 +94,7 @@ TEST (first_come_first_serve, CorrectInput)
 
 	bool success = first_come_first_serve(blocks, &results);
 	EXPECT_EQ(success,true);
-    EXPECT_EQ(results.average_turnaround_time, (float)16); //Maybe calculated wrong
+    EXPECT_EQ(results.average_turnaround_time, (float)26);
     EXPECT_EQ(results.average_waiting_time, (float)16);
     EXPECT_EQ(results.total_run_time, (float)30);
 }

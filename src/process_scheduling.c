@@ -23,7 +23,7 @@ bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result)
 {
     if(ready_queue == NULL)                                 // Return false for invalid parameters
     {
-        printf("Invalid Parmeter in FCFS");
+        printf("Invalid Parameter in FCFS");
         return false;
     }
     size_t n = dyn_array_size(ready_queue);

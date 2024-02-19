@@ -19,7 +19,16 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    abort();  // replace me with implementation.
+    if(argc == 3){
+        const char *input_filename = "../pcb.bin";
+        dyn_array_t* blocks = load_process_control_blocks(input_filename);
+        ScheduleResult_t* results = malloc(sizeof(ScheduleResult_t));
+
+        first_come_first_serve(blocks, results);
+        printf("Average Turnaround Time: %f\n", results->average_turnaround_time);
+        printf("Total Run Time: %ld\n", results->total_run_time);
+        printf("Average Waiting Time: %f\n", results->average_waiting_time);
+    }
 
     return EXIT_SUCCESS;
 }
