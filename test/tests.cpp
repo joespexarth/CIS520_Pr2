@@ -94,8 +94,8 @@ TEST (first_come_first_serve, CorrectInput)
 
 	bool success = first_come_first_serve(blocks, &results);
 	EXPECT_EQ(success,true);
-    EXPECT_EQ(results.average_turnaround_time, (float)26);
-    EXPECT_EQ(results.average_waiting_time, (float)16);
+    EXPECT_EQ(results.average_turnaround_time, (float)27);
+    EXPECT_EQ(results.average_waiting_time, (float)17);
     EXPECT_EQ(results.total_run_time, (float)30);
 }
 

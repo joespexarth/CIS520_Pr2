@@ -28,15 +28,6 @@ extern "C"
     } 
     ScheduleResult_t;
 
-    typedef struct 
-    {
-        float* waiting_time;     // the waiting time in the ready queue until first schedue on the cpu
-        float* turnaround_time;  // the completion time of the PCBs
-        unsigned long total_run_time;   // the total time to process all the PCBs in the ready queue
-    } 
-    NotePad_t;
-
-
 
     // Reads the PCB burst time values from the binary file into ProcessControlBlock_t remaining_burst_time field
     // for N number of PCB burst time stored in the file.
@@ -55,12 +46,6 @@ extern "C"
     // \param result used for shortest job first stat tracking \ref ScheduleResult_t
     // \return true if function ran successful else false for an error
     bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result);
-
-    // Runs the Priority algorithm over the incoming ready_queue
-    // \param ready queue a dyn_array of type ProcessControlBlock_t that contain be up to N elements
-    // \param result used for shortest job first stat tracking \ref ScheduleResult_t
-    // \return true if function ran successful else false for an error
-    bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result);
 
     // Runs the Round Robin Process Scheduling algorithm over the incoming ready_queue
     // \param ready queue a dyn_array of type ProcessControlBlock_t that contain be up to N elements
@@ -81,6 +66,26 @@ extern "C"
     // \return an integer value  >, =, or < 1 depending on comparison result
     int compare_arrival_times(const void *blockOne, const void *blockTwo);
     
+    // Compares the Burst time of block one to block two, used for qsort
+    // \param First PCB to be compared
+    // \param Second PCB to be compared
+    // \return an integer value  >, =, or < 1 depending on comparison result
+    int compare_burst_times(const void *blockOne, const void *blockTwo);
+
+    /*
+    // Runs the Priority algorithm over the incoming ready_queue
+    // \param ready queue a dyn_array of type ProcessControlBlock_t that contain be up to N elements
+    // \param result used for shortest job first stat tracking \ref ScheduleResult_t
+    // \return true if function ran successful else false for an error
+    bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result);
+
+    // Compares the Priority of block one to block two, used for qsort
+    // \param First PCB to be compared
+    // \param Second PCB to be compared
+    // \return an integer value  >, =, or < 1 depending on comparison result
+    int compare_priority(const void *blockOne, const void *blockTwo);
+    */
+   
 #ifdef __cplusplus
 }
 #endif
