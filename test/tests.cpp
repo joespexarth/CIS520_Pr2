@@ -118,3 +118,99 @@ TEST (load_process_control_blocks, GoodArray)
     EXPECT_NE(blocks, nullptr);
 	EXPECT_EQ(dyn_array_size(blocks), size);
 }
+
+/////////////////////////////////////
+TEST(compare_arrival_times, FirstArrivalEarlier) {
+    ProcessControlBlock_t block1;
+    block1.arrival = 5;
+    
+    ProcessControlBlock_t block2;
+    block2.arrival = 10;
+
+    int result = compare_arrival_times(&block1, &block2);
+    EXPECT_LT(result, 0);
+}
+
+TEST(compare_arrival_times, SecondArrivalEarlier) {
+    ProcessControlBlock_t block1;
+    block1.arrival = 15;
+    
+    ProcessControlBlock_t block2;
+    block2.arrival = 10;
+
+    int result = compare_arrival_times(&block1, &block2);
+    EXPECT_GT(result, 0);
+}
+
+
+TEST(compare_burst_times, FirstBurstShorter) {
+    ProcessControlBlock_t block1;
+    block1.remaining_burst_time = 10;
+    
+    ProcessControlBlock_t block2;
+    block2.remaining_burst_time = 15;
+
+    int result = compare_burst_times(&block1, &block2);
+    EXPECT_LT(result, 0);
+}
+
+TEST(compare_burst_times, SecondBurstShorter) {
+    ProcessControlBlock_t block1;
+    block1.remaining_burst_time = 20;
+    
+    ProcessControlBlock_t block2;
+    block2.remaining_burst_time = 10;
+
+    int result = compare_burst_times(&block1, &block2);
+    EXPECT_GT(result, 0);
+}
+
+//1 Process in ready queue
+TEST(shortest_job_first, SingleProcess) {
+    dyn_array_t* blocks = dyn_array_create(1, sizeof(ProcessControlBlock_t), NULL);
+    ProcessControlBlock_t block;
+    block.arrival = 0;
+    block.priority = 3;
+    block.remaining_burst_time = 24;
+    block.started = false;
+
+   dyn_array_push_front(blocks, &block);
+
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+    bool success = shortest_job_first(blocks, &results);
+    EXPECT_TRUE(success);
+    EXPECT_EQ(results.average_turnaround_time, (float)24);
+    EXPECT_EQ(results.average_waiting_time, (float)0);
+    EXPECT_EQ(results.total_run_time, (float)24);
+
+}
+
+
+TEST(shortest_job_first, MultipleProcess) {
+    dyn_array_t* blocks = dyn_array_create(3, sizeof(ProcessControlBlock_t), NULL);
+    ProcessControlBlock_t block1, block2, block3, block4;
+    block1.remaining_burst_time = 6;
+    block2.remaining_burst_time = 8;
+    block3.remaining_burst_time = 7;
+    block4.remaining_burst_time = 3;
+    dyn_array_push_front(blocks, &block1);
+    dyn_array_push_front(blocks, &block2);
+    dyn_array_push_front(blocks, &block3);
+    dyn_array_push_front(blocks, &block4);
+
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+    bool success = shortest_job_first(blocks, &results);
+    EXPECT_TRUE(success);
+    EXPECT_EQ(results.average_turnaround_time, (float)13);
+    EXPECT_EQ(results.average_waiting_time, (float)7);
+    EXPECT_EQ(results.total_run_time, (float)24);
+
+}
