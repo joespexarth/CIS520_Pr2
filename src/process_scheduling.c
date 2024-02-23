@@ -188,7 +188,7 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     unsigned long totalTurnAroundTime = 0; // Total process turnaround
 
     size_t remaining_processes = size; // processes left, should be initialized to size and decremement while executing
-
+    /*
     while (remaining_processes > 0) {
         for (size_t i = 0; i < size; ++i) {
             ProcessControlBlock_t *PCB = dyn_array_at(ready_queue, i);
@@ -197,7 +197,7 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
                 PCB->started = true; // Mark process as started
                 totalWaitTime += totalRunTime - PCB->arrival; // Update wait time
             }
-
+            
            size_t exec; //execution time
            //check process and execute until finishing or for quantum
             if (PCB->remaining_burst_time < quantum) {
@@ -217,6 +217,27 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
                 --size; //  dEcrement size 
                 break;
             }
+        }
+    */
+        while(dyn_array_size(ready_queue) != 0)
+        {
+            ProcessControlBlock_t *PCB = dyn_array_pop_front(ready_queue);
+            if(!(PCB->started)){
+                    totalWaitTime += totalRunTime;                                          // Keep track of the total wait time -> calulating wait time first as we are not waiting on first iteration
+                    PCB->started = true;
+            }
+            for(size_t i = 0; i < quantum; i++)
+            {
+                virtual_cpu(PCB);
+                totalRunTime++;
+                if(PCB->remaining_burst_time == 0)
+                    i = quantum;
+            }
+            if(PCB->remaining_burst_time > 0){
+                dyn_array_push_back(ready_queue, PCB);
+            }
+            else totalTurnAroundTime += totalRunTime;      // the runtime of the current PCB in-order for this PCB to start
+            
         }
     }
 
