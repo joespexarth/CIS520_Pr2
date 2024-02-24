@@ -222,7 +222,8 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     */
         while(dyn_array_size(ready_queue) != 0)
         {
-            ProcessControlBlock_t *PCB = dyn_array_pop_front(ready_queue);
+            ProcessControlBlock_t *PCB = malloc(sizeof(PCB));
+            dyn_array_extract_front(ready_queue, PCB);
             if(!(PCB->started)){
                     totalWaitTime += totalRunTime;                                          // Keep track of the total wait time -> calulating wait time first as we are not waiting on first iteration
                     PCB->started = true;

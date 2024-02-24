@@ -25,16 +25,16 @@ int main(int argc, char **argv)
         const char *input_filename = argv[1];
         dyn_array_t* blocks = load_process_control_blocks(input_filename);
         ScheduleResult_t* results = malloc(sizeof(ScheduleResult_t));
-        if(argv[2] == FCFS){
+        if(strncmp(argv[2], FCFS, 5) == 0){
             first_come_first_serve(blocks, results);
         }
-        else if (argv[2] == SRTF){
+        else if (strncmp(argv[2], SRTF, 5) == 0){
             shortest_remaining_time_first(blocks, results);
         }
-        else if (argv[2] == RR){
-            round_robin(blocks, results, sscanf(argv[3], "%d", quantum));
+        else if (strncmp(argv[2], RR, 5) == 0){
+            round_robin(blocks, results, sscanf(argv[3], "%d", &quantum));
         }
-        else if (argv[2] == SJF){
+        else if (strncmp(argv[2], SJF, 5) == 0){
             shortest_job_first(blocks, results);
         }
         printf("Average Turnaround Time: %f\n", results->average_turnaround_time);
