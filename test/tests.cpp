@@ -189,7 +189,7 @@ TEST(shortest_job_first, SingleProcess) {
 
 }
 
-
+//Shortest job test with multiple processes
 TEST(shortest_job_first, MultipleProcess) {
     dyn_array_t* blocks = dyn_array_create(3, sizeof(ProcessControlBlock_t), NULL);
     ProcessControlBlock_t block1, block2, block3, block4;
@@ -213,4 +213,58 @@ TEST(shortest_job_first, MultipleProcess) {
     EXPECT_EQ(results.average_waiting_time, (float)7);
     EXPECT_EQ(results.total_run_time, (float)24);
 
+}
+
+
+//Tests for when round robin should work with multiple processes
+TEST (round_robin, CorrectInput) 
+{
+	dyn_array_t* blocks = dyn_array_create(3, sizeof(ProcessControlBlock_t), NULL);
+
+    ProcessControlBlock_t block1;
+    ProcessControlBlock_t block2;
+    ProcessControlBlock_t block3;
+
+    block1.arrival = 24;
+    block2.arrival = 3;
+    block3.arrival = 3;
+
+    block1.priority = 3;
+    block2.priority = 1;
+    block3.priority = 2;
+
+    block1.remaining_burst_time = 24;
+    block2.remaining_burst_time = 3;
+    block3.remaining_burst_time = 3;
+
+    block1.started = false;
+    block2.started = false;
+    block3.started = false;
+    
+    dyn_array_push_front(blocks, &block1);
+    dyn_array_push_front(blocks, &block2);
+    dyn_array_push_front(blocks, &block3);
+
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+	bool success = first_come_first_serve(blocks, &results);
+	EXPECT_EQ(success,true);
+    EXPECT_EQ(results.average_turnaround_time, (float)47.0/3.0);
+    EXPECT_EQ(results.average_waiting_time, (float)11.0/3.0);
+    EXPECT_EQ(results.total_run_time, (float)30);
+}
+
+//Tests for when a parameter is wrong
+TEST (round_robin, IncorrectParameters) 
+{
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+	bool success = round_robin(nullptr, &results);
+	EXPECT_EQ(success,false);
 }
