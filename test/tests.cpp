@@ -268,3 +268,42 @@ TEST (round_robin, IncorrectParameters)
 	bool success = round_robin(nullptr, &results);
 	EXPECT_EQ(success,false);
 }
+
+
+//Shortest remaining time first test with multiple processes
+TEST(shortest_remaining_time_first, MultipleProcess) {
+    dyn_array_t* blocks = dyn_array_create(3, sizeof(ProcessControlBlock_t), NULL);
+    ProcessControlBlock_t block1, block2, block3, block4;
+    block1.remaining_burst_time = 6;
+    block2.remaining_burst_time = 8;
+    block3.remaining_burst_time = 7;
+    block4.remaining_burst_time = 3;
+    dyn_array_push_front(blocks, &block1);
+    dyn_array_push_front(blocks, &block2);
+    dyn_array_push_front(blocks, &block3);
+    dyn_array_push_front(blocks, &block4);
+
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+    bool success = shortest_remaining_time_first(blocks, &results);
+    EXPECT_TRUE(success);
+    EXPECT_EQ(results.average_turnaround_time, (float)13);
+    EXPECT_EQ(results.average_waiting_time, (float)7);
+    EXPECT_EQ(results.total_run_time, (float)24);
+
+}
+
+//Tests for when a parameter is wrong
+TEST (shortest_remaining_time_first, IncorrectParameters) 
+{
+    ScheduleResult_t results;
+    results.average_waiting_time = 0;
+    results.average_turnaround_time = 0;
+    results.total_run_time = 0;
+
+	bool success = shortest_remaining_time_first(nullptr, &results);
+	EXPECT_EQ(success,false);
+}
