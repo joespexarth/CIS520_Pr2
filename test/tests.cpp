@@ -264,8 +264,9 @@ TEST (round_robin, IncorrectParameters)
     results.average_waiting_time = 0;
     results.average_turnaround_time = 0;
     results.total_run_time = 0;
+    size_t quantum = 0; 
 
-	bool success = round_robin(nullptr, &results);
+    bool success = round_robin(nullptr, &results, quantum); 
 	EXPECT_EQ(success,false);
 }
 

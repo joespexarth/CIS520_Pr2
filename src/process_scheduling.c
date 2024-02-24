@@ -188,7 +188,7 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     unsigned long totalWaitTime = 0; // Total process wait time
     unsigned long totalTurnAroundTime = 0; // Total process turnaround
 
-    size_t remaining_processes = size; // processes left, should be initialized to size and decremement while executing
+    //size_t remaining_processes = size; // processes left, should be initialized to size and decremement while executing
     /*
     while (remaining_processes > 0) {
         for (size_t i = 0; i < size; ++i) {
