@@ -240,7 +240,6 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
             else totalTurnAroundTime += totalRunTime;      // the runtime of the current PCB in-order for this PCB to start
             
         }
-    }
 
     
     result->average_waiting_time = (float)totalWaitTime / size; // Set the schedule results
@@ -252,38 +251,38 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
 
 dyn_array_t *load_process_control_blocks(const char *input_file) 
 {
-    dyn_array_t* blocks;
-    ProcessControlBlock_t block;
-    int numBlocks;
+    dyn_array_t* blocks; //The array of blocks.
+    ProcessControlBlock_t block; //The current block being read from the file
+    int numBlocks; //The number of blocks in the file
     int file = open(input_file, O_RDONLY);
-    if(file == -1){
+    if(file == -1){ //Checks to see if the file is opened
         return NULL;
     }
 
-    int error = read(file, &numBlocks, 4);
-    if (error == -1){
+    int error = read(file, &numBlocks, 4); //reads the number of blocks
+    if (error == -1){ //Checks to see if the file is read properly
         return NULL;
     }
-    blocks = dyn_array_create(numBlocks, sizeof(ProcessControlBlock_t), NULL);
-    for(int i = 0; i < numBlocks; ++i){
-        error = read(file, &(block.remaining_burst_time), 4);
-        if(error == -1){
+    blocks = dyn_array_create(numBlocks, sizeof(ProcessControlBlock_t), NULL); //Creates an array of blocks
+    for(int i = 0; i < numBlocks; ++i){ //Loops until all blocks have been pushed into the array
+        error = read(file, &(block.remaining_burst_time), 4); //reads the file into the burst time of the block
+        if(error == -1){ //Checks to see if the file is read properly
             return NULL;
         }
-        error = read(file, &(block.priority), 4);
-        if(error == -1){
+        error = read(file, &(block.priority), 4); //reads the file into the priority of the block
+        if(error == -1){ //Checks to see if the file is read properly
             return NULL;
         }
-        error = read(file, &(block.arrival), 4);
-        if(error == -1){
+        error = read(file, &(block.arrival), 4); //reads the file into the arrival time for the block
+        if(error == -1){ //Checks to see if the file is read properly
             return NULL;
         }
 
-        dyn_array_push_front(blocks, &block);
+        dyn_array_push_front(blocks, &block); //Pushes the block into the array.
     }
 
-    close(file);
-    return blocks;
+    close(file); //Closes the file
+    return blocks; //Returns the array of blocks
 }
 
 bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *result) 

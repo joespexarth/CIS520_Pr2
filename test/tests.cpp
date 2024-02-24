@@ -119,7 +119,7 @@ TEST (load_process_control_blocks, GoodArray)
 	EXPECT_EQ(dyn_array_size(blocks), size);
 }
 
-/////////////////////////////////////
+//Tests for comparing arrival times
 TEST(compare_arrival_times, FirstArrivalEarlier) {
     ProcessControlBlock_t block1;
     block1.arrival = 5;
@@ -142,7 +142,7 @@ TEST(compare_arrival_times, SecondArrivalEarlier) {
     EXPECT_GT(result, 0);
 }
 
-
+//TESTS for comparing burst times
 TEST(compare_burst_times, FirstBurstShorter) {
     ProcessControlBlock_t block1;
     block1.remaining_burst_time = 10;
