@@ -170,8 +170,10 @@ bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result)
 */
 bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quantum) 
 {
-      if (ready_queue == NULL || result == NULL)  return false;
+    //Check for nulls
+    if (ready_queue == NULL || result == NULL)  return false;
 
+    //Get ready queue size
     size_t size = dyn_array_size(ready_queue);
     if (size == 0){
         printf("Invalid Array Size in RR");
@@ -182,14 +184,19 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     unsigned long totalWaitTime = 0; // Total process wait time
     unsigned long totalTurnAroundTime = 0; // Total process turnaround
 
+        //loops until processes in ready queue are executed   
         while(dyn_array_size(ready_queue) != 0)
         {
+            //get first process control block
             ProcessControlBlock_t *PCB = malloc(sizeof(PCB));
             dyn_array_extract_front(ready_queue, PCB);
+            //Calculate total wait time for the process if hasnt started
             if(!(PCB->started)){
-                    totalWaitTime += totalRunTime;                                          // Keep track of the total wait time -> calulating wait time first as we are not waiting on first iteration
+                    totalWaitTime += totalRunTime;        // Keep track of the total wait time -> calulating wait time first as we are not waiting on first iteration
+                    //printf("Total Waiting time = %lu\n", totalWaitTime);
                     PCB->started = true;
             }
+            //quantum execution 
             for(size_t i = 0; i < quantum; i++)
             {
                 virtual_cpu(PCB);
@@ -197,10 +204,14 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
                 if(PCB->remaining_burst_time == 0)
                     i = quantum;
             }
+            //push back process to ready queue if burst time remains
             if(PCB->remaining_burst_time > 0){
                 dyn_array_push_back(ready_queue, PCB);
             }
-            else totalTurnAroundTime += totalRunTime;      // the runtime of the current PCB in-order for this PCB to start
+            else{
+                totalTurnAroundTime += totalRunTime;      // the runtime of the current PCB in-order for this PCB to start
+                //printf("Total turnaround = %lu\n", totalTurnAroundTime);
+            } 
             
         }
 

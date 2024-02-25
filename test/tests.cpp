@@ -255,9 +255,9 @@ TEST (round_robin, CorrectInput)
     block3.remaining_burst_time = 3;
     block3.started = false;
     
-    dyn_array_push_front(blocks, &block1);
-    dyn_array_push_front(blocks, &block2);
     dyn_array_push_front(blocks, &block3);
+    dyn_array_push_front(blocks, &block2);
+    dyn_array_push_front(blocks, &block1);
 
     ScheduleResult_t results;
     results.average_waiting_time = 0;
@@ -266,8 +266,8 @@ TEST (round_robin, CorrectInput)
 
     bool success = round_robin(blocks, &results, 5); 
     EXPECT_EQ(success, true);
-    EXPECT_FLOAT_EQ(results.average_turnaround_time, (float)47.0/3.0);
-    EXPECT_FLOAT_EQ(results.average_waiting_time, (float)11.0/3.0); 
+    EXPECT_FLOAT_EQ(results.average_turnaround_time, (float)(30+8+11)/3); 
+    EXPECT_FLOAT_EQ(results.average_waiting_time, (float)(9+4+0)/3);  
     EXPECT_EQ(results.total_run_time, (float)30);
 
     dyn_array_destroy(blocks);
