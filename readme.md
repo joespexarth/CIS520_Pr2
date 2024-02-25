@@ -21,7 +21,7 @@ Average Turnaround Time: 25.000000
 Total Run Time: 50
 Average Waiting Time: 12.500000
 ---------------------------------------------------------------------------
- ./analysis pcb.bin RR 
+ ./analysis pcb.bin RR 4
 Average Turnaround Time: 36.750000
 Total Run Time: 50
 Average Waiting Time: 1.500000
