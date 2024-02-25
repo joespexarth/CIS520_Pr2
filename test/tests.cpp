@@ -164,7 +164,7 @@ TEST(compare_burst_times, SecondBurstShorter) {
     int result = compare_burst_times(&block1, &block2);
     EXPECT_GT(result, 0);
 }
-/*
+
 //1 Process in ready queue
 TEST(shortest_job_first, SingleProcess) {
     dyn_array_t* blocks = dyn_array_create(1, sizeof(ProcessControlBlock_t), NULL);
@@ -188,7 +188,7 @@ TEST(shortest_job_first, SingleProcess) {
     EXPECT_EQ(results.total_run_time, (float)24);
 
 }
-*/
+
 // Check for null or invalid parameters
 TEST(shortest_job_first, InvalidParam) {
     dyn_array_t* invalid_queue = NULL; 

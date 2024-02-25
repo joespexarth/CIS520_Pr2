@@ -108,12 +108,6 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
             virtual_cpu(PCB);
         }
     }
-
-    if(totalWaitTime <= 0 || totalRunTime <= 0 || totalTurnAroundTime <= 0)             //  Ensure logical values
-    {
-        printf("Failed to calulate scheduling parameters in SJF");
-        return false;
-    }
     
     result->average_waiting_time = (float) totalWaitTime / n;         // Set the schedule results
     result->average_turnaround_time = (float) totalTurnAroundTime / n;  
@@ -188,38 +182,6 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     unsigned long totalWaitTime = 0; // Total process wait time
     unsigned long totalTurnAroundTime = 0; // Total process turnaround
 
-    //size_t remaining_processes = size; // processes left, should be initialized to size and decremement while executing
-    /*
-    while (remaining_processes > 0) {
-        for (size_t i = 0; i < size; ++i) {
-            ProcessControlBlock_t *PCB = dyn_array_at(ready_queue, i);
-            
-            if (PCB->started == false) {
-                PCB->started = true; // Mark process as started
-                totalWaitTime += totalRunTime - PCB->arrival; // Update wait time
-            }
-            
-           size_t exec; //execution time
-           //check process and execute until finishing or for quantum
-            if (PCB->remaining_burst_time < quantum) {
-                exec = PCB->remaining_burst_time;
-            } else {
-                exec = quantum;
-            }
-
-            totalRunTime += exec; // Update total run time
-            PCB->remaining_burst_time -= exec; // Update remaining burst time
-
-            //check if process is finished
-            if (PCB->remaining_burst_time == 0) { 
-                totalTurnAroundTime += totalRunTime - PCB->arrival; // Uupdate turn around 
-                --remaining_processes; // decrement processes left
-                dyn_array_remove(ready_queue, i); //get rid of process
-                --size; //  dEcrement size 
-                break;
-            }
-        }
-    */
         while(dyn_array_size(ready_queue) != 0)
         {
             ProcessControlBlock_t *PCB = malloc(sizeof(PCB));
