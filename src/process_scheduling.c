@@ -54,7 +54,7 @@ bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result)
         {
             virtual_cpu(PCB);
         }
-        printf("Entered the loop");
+        //printf("Entered the loop");
     }
 
     if(totalWaitTime <= 0 || totalRunTime <= 0 || totalTurnAroundTime <= 0)             //  Ensure logical values
