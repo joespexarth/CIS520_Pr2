@@ -11,22 +11,22 @@ You can manually copy the time analysis from console and paste it to this readme
 ---------------------------------------------------------------------------
 Add your scheduling algorithm analysis below this line in a readable format. 
 ---------------------------------------------------------------------------
-./analysis pcb.bin FCFS 4
+./analysis pcb.bin FCFS 
 Average Turnaround Time: 30.000000
 Total Run Time: 50
 Average Waiting Time: 17.500000
 ---------------------------------------------------------------------------
- ./analysis pcb.bin SRTF 4
+ ./analysis pcb.bin SRTF 
 Average Turnaround Time: 25.000000
 Total Run Time: 50
 Average Waiting Time: 12.500000
 ---------------------------------------------------------------------------
- ./analysis pcb.bin RR 4
+ ./analysis pcb.bin RR 
 Average Turnaround Time: 36.750000
 Total Run Time: 50
 Average Waiting Time: 1.500000
 ---------------------------------------------------------------------------
- ./analysis pcb.bin SJF 4
+ ./analysis pcb.bin SJF 
 Average Turnaround Time: 25.000000
 Total Run Time: 50
 Average Waiting Time: 12.500000
